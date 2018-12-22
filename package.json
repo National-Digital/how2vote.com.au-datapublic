@@ -1,0 +1,24 @@
+{
+  "name": "theyvoteforyou.how2vote.com.au",
+  "description": "theyvoteforyou.how2vote.com.au",
+  "version": "1.0.0",
+  "author": "National Digital",
+  "license": "ODbL-1.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/National-Digital/theyvoteforyou.how2vote.com.au.com.au.git"
+  },
+  "bugs": {
+    "url": "https://github.com/National-Digital/theyvoteforyou.how2vote.com.au/issues"
+  },
+  "homepage": "https://github.com/National-Digital/theyvoteforyou.how2vote.com.au.com.au#readme",
+  "main": "index.js",
+  "scripts": {
+    "fetch": "node dataFetch.js",
+    "process": "node dataProcess.js"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "fs-extra": "^7.0.1"
+  }
+}
