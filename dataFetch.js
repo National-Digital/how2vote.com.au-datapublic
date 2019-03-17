@@ -29,20 +29,33 @@ getPolicy().then(function(result) {
 	});
 });
 function buildPolicyArray(policyContent) {
-	let
-	description = policyContent.description,
-	id = policyContent.id,
-	comparisons = new Array();
+	let	comparisons = new Array();
+
+	//get the date from the policy_divisions array and find the latest
+	let date = policyContent.policy_divisions.map(item => new Date(item.division.date));
+	let last_division = new Date(Math.max.apply(null,date));
 			
-	policyContent.people_comparisons.forEach(function(people, index){ 
+	policyContent.people_comparisons.forEach(function(people, index){
+		//if it's an independant then change the party with the politicians name
+		if(people.person.latest_member.party == 'Independent') {
+			if(people.person.latest_member.house == 'representatives') {
+				people.person.latest_member.party = Object.values(people.person.latest_member.name).join(' ') + ' MP';
+			}
+			if(people.person.latest_member.house == 'senate') {
+				people.person.latest_member.party = 'Senator ' + Object.values(people.person.latest_member.name).join(' ');
+			}
+		}
+		//push all results into the final array
 		comparisons.push({
-			'party': people.person.latest_member.party,
+			'party': people.person.latest_member.party.replace(/\s+/g, '_').replace(/'+/g, '').toLowerCase(),
 			'aggreement': people.agreement
 		});
+
 		return comparisons;
 	})
 	completedArray.push(
-		{'id': id, 'policy': description, 'comparisons':comparisons}
+		{'id': policyContent.id, 'issue_title': policyContent.name, 'issue_description': policyContent.description, 'issue_divisions': policyContent.policy_divisions.length, 'issue_date': last_division, 'comparisons': comparisons}
 	);
+
 	return completedArray;
 }

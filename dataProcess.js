@@ -28,7 +28,8 @@ async function buildUniqueList() {
 					'aggreement': -1
 				})
 			});
-			
+
+
 			const { assign } = Object;
 			const map = new Map();
 
@@ -53,8 +54,11 @@ async function buildUniqueList() {
 				}
 			}));
 
+
+
 			//create add agreement together for party members and calculate total party counts
 			const count = compare.reduce((accumulator, currentValue) => {
+				
 				if (!accumulator[currentValue.party]) {
 					accumulator[currentValue.party] = 
 					{	
@@ -62,14 +66,12 @@ async function buildUniqueList() {
 						'count': 1,
 						'party': currentValue.party
 					}
-				} else {
-					accumulator[currentValue.party] = 
-					{
-						'agreement': accumulator[currentValue.party].agreement + Number(currentValue.aggreement),
-						'count': accumulator[currentValue.party].count + 1,
-						'party': accumulator[currentValue.party].party
-					}
-				}	
+				}
+				if (accumulator[currentValue.party] && accumulator[currentValue.party].agreement > -1) {
+					accumulator[currentValue.party].agreement += Number(currentValue.aggreement);
+					accumulator[currentValue.party].count += 1;
+				}
+
 				return accumulator;
 			} , {})	
 
@@ -79,12 +81,20 @@ async function buildUniqueList() {
 			var obj = {};
 
 			for(const key of keys) {
-				let partyRaw = key.party;			
-				let partySlugified = partyRaw.replace(/\s+/g, '_').replace(/'+/g, '').toLowerCase();
-
 				obj['id'] = item.id;
-				obj['question'] = item.policy;
-				obj[partySlugified] = Number(key.agreement / key.count).toFixed(0);
+				obj['issue_title'] = item.issue_title;
+				obj['issue_description'] = item.issue_description;
+				obj['issue_divisions'] = item.issue_divisions;
+				obj['issue_date'] = item.issue_date;
+
+				let vote = Number(key.agreement / key.count);				
+				if(vote == 0) {
+					vote = 0.01;
+				}
+				if(vote > 0) {
+					vote = Math.ceil((vote / 100) * 5);
+				}
+				obj[key.party] = vote; 
 			}
 
 			return obj;
