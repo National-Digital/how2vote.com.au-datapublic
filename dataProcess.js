@@ -84,8 +84,9 @@ async function buildUniqueList() {
 				obj['id'] = item.id;
 				obj['issue_title'] = item.issue_title;
 				obj['issue_description'] = item.issue_description;
-				obj['issue_divisions'] = item.issue_divisions;
-				obj['issue_date'] = item.issue_date;
+				obj['division_count'] = item.division_count;
+				obj['division_last'] = item.division_last;
+				obj['division_first'] = item.division_first;
 
 				let vote = Number(key.agreement / key.count);				
 				if(vote == 0) {

@@ -33,6 +33,7 @@ function buildPolicyArray(policyContent) {
 
 	//get the date from the policy_divisions array and find the latest
 	let date = policyContent.policy_divisions.map(item => new Date(item.division.date));
+	let first_division = new Date(Math.min.apply(null,date));
 	let last_division = new Date(Math.max.apply(null,date));
 			
 	policyContent.people_comparisons.forEach(function(people, index){
@@ -54,7 +55,7 @@ function buildPolicyArray(policyContent) {
 		return comparisons;
 	})
 	completedArray.push(
-		{'id': policyContent.id, 'issue_title': policyContent.name, 'issue_description': policyContent.description, 'issue_divisions': policyContent.policy_divisions.length, 'issue_date': last_division, 'comparisons': comparisons}
+		{'id': policyContent.id, 'issue_title': policyContent.name, 'issue_description': policyContent.description, 'division_count': policyContent.policy_divisions.length, 'division_first': first_division, 'division_last': last_division, 'comparisons': comparisons}
 	);
 
 	return completedArray;
